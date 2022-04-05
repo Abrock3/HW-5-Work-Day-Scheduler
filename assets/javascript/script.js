@@ -1,6 +1,7 @@
 const currentDayEl = document.querySelector("#currentDay");
 const containerEl = document.querySelector(".container");
 let timeout;
+
 // used the nullish operater to determine if there's already local storage, and if not to generate an empty array for both variables
 let savedTasksArray = JSON.parse(
   localStorage.getItem("savedCalendarTasks")
@@ -11,10 +12,14 @@ let unsavedTasksArray = JSON.parse(
 // this variable gets used to set the date in the header; in addition it's used later to determine whether each hour has already passed
 const today = moment();
 currentDayEl.innerText = today.format("dddd, MMMM Do");
+
 // This function gets called multiple times to create and append the rows of the table
 function createHourLine(i) {
   const rowEl = document.createElement("tr");
-  const hour = i > 12 ? i - 12 + ":00 PM" : i + ":00 AM";
+  let hour = i > 11 ? i - 12 + ":00 PM" : i + ":00 AM";
+  if (i === 12) {
+    hour = "12:00 PM";
+  }
   const task = savedTasksArray[i - 9] ?? "";
   const rowNumber = i - 9;
   if (today.format("HH") > i) {
@@ -60,8 +65,8 @@ containerEl.addEventListener("focusin", (event) => {
 containerEl.addEventListener("focusout", (event) => {
   event.stopPropagation();
   const target = event.target;
-  if(target.classList.contains("editField")){
-      target.innerText = target.innerText.trim();
+  if (target.classList.contains("editField")) {
+    target.innerText = target.innerText.trim();
   }
   if (
     target.classList.contains("editField") &&
@@ -106,7 +111,7 @@ containerEl.addEventListener("click", (event) => {
     editableField.innerText += " (Saved!)";
     setTimeout(function () {
       editableField.innerText = editableField.dataset.content;
-    }, 400);
+    }, 600);
     return;
   }
   //   swaps the "saved" phrase and state on this row to the "unsaved" phrase and state
@@ -197,7 +202,7 @@ document.querySelector("#saveAll").addEventListener("click", function () {
       editableField.innerText += " (Saved!)";
       setTimeout(function () {
         editableField.innerText = editableField.dataset.content;
-      }, 400);
+      }, 600);
     }
   }
   localStorage.setItem(
@@ -211,3 +216,30 @@ document.querySelector("#saveAll").addEventListener("click", function () {
   );
   localStorage.setItem("savedCalendarTasks", JSON.stringify(savedTasksArray));
 });
+let nextHour = moment();
+nextHour.set({
+  hour: nextHour.hour() + 1,
+  minute: 0,
+  second: 0,
+  millisecond: 0,
+});
+// This interval determines the amount of time until the next hour, and when the hour passes it changes the formatting of the <tr> elements using bootstrap classes
+setInterval(function () {
+  const thisHourEl = document.querySelector(
+    "tr[data-row-number='" + (moment().hour() - 9) + "']"
+  );
+  const nextHourEl = document.querySelector(
+    "tr[data-row-number='" + (moment().hour() - 10) + "']"
+  );
+  thisHourEl.classList.remove("bg-success");
+  thisHourEl.classList.add("bg-warning");
+  nextHourEl.classList.remove("bg-warning");
+  nextHourEl.classList.add("bg-secondary");
+  nextHour = moment();
+  nextHour.set({
+    hour: nextHour.hour() + 1,
+    minute: 0,
+    second: 0,
+    millisecond: 0,
+  });
+}, nextHour.diff(moment()) + 1);
