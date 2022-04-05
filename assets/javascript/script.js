@@ -60,6 +60,9 @@ containerEl.addEventListener("focusin", (event) => {
 containerEl.addEventListener("focusout", (event) => {
   event.stopPropagation();
   const target = event.target;
+  if(target.classList.contains("editField")){
+      target.innerText = target.innerText.trim();
+  }
   if (
     target.classList.contains("editField") &&
     target.innerText != savedTasksArray[target.dataset.rowNumber]
@@ -77,7 +80,7 @@ containerEl.addEventListener("focusout", (event) => {
   }
 });
 // this eventlistener uses event delegation to listen for clicks, the if statements determine what the target is, and
-// will save it, toggle it between saved and unsaved, or clear it (saving the saved value in the "unsaved" array)
+// will save the phrase from the associated row, toggle it between saved and unsaved, or clear it
 containerEl.addEventListener("click", (event) => {
   event.stopPropagation();
   const target = event.target;
