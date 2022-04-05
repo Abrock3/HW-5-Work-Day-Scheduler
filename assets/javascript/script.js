@@ -1,16 +1,15 @@
 const currentDayEl = document.querySelector("#currentDay");
 const containerEl = document.querySelector(".container");
+// used the nullish operater to determine if there's already local storage, and if not to generate an empty array for both variables
 let savedTasksArray = JSON.parse(
   localStorage.getItem("savedCalendarTasks")
 ) ?? ["", "", "", "", "", "", "", ""];
 let unsavedTasksArray = JSON.parse(
   localStorage.getItem("unsavedCalendarTasks")
 ) ?? ["", "", "", "", "", "", "", ""];
+// this variable gets used to set the date in the header; in addition it's used later to determine whether each hour has already passed
 const today = moment();
-function setCurrentDay() {
-  currentDayEl.innerText = today.format("dddd, MMMM Do");
-}
-setCurrentDay();
+currentDayEl.innerText = today.format("dddd, MMMM Do");
 
 function createHourLine(i) {
   const rowEl = document.createElement("tr");
@@ -97,7 +96,8 @@ containerEl.addEventListener("click", (event) => {
   }
   if (
     target.classList.contains("toggle") &&
-    editableField.dataset.content === savedTasksArray[rowNumber]
+    editableField.dataset.content === savedTasksArray[rowNumber] &&
+    unsavedTasksArray[rowNumber] !== ""
   ) {
     editableField.dataset.content = unsavedTasksArray[rowNumber];
     editableField.innerText = editableField.dataset.content;
@@ -114,10 +114,61 @@ containerEl.addEventListener("click", (event) => {
     editableField.classList.remove("font-italic");
     return;
   }
-  if (target.classList.contains("trash") ) {
-    unsavedTasksArray[rowNumber] = editableField.dataset.content;
+  if (target.classList.contains("trash")) {
+    unsavedTasksArray[rowNumber] = savedTasksArray[rowNumber];
     editableField.innerText = "";
     editableField.dataset.content = "";
     savedTasksArray[rowNumber] = "";
+    localStorage.setItem(
+      "unsavedCalendarTasks",
+      JSON.stringify(unsavedTasksArray)
+    );
+    localStorage.setItem("savedCalendarTasks", JSON.stringify(savedTasksArray));
+    localStorage.setItem(
+      "unsavedCalendarTasks",
+      JSON.stringify(unsavedTasksArray)
+    );
+    localStorage.setItem("savedCalendarTasks", JSON.stringify(savedTasksArray));
+  }
+});
+document.querySelector("#clearAll").addEventListener("click", function () {
+  for (let i = 0; i < 8; i++) {
+    const editableField = document.querySelector(
+      "td[data-row-number='" + i + "']"
+    );
+    unsavedTasksArray[i] = savedTasksArray[i];
+    editableField.innerText = "";
+    editableField.dataset.content = "";
+    savedTasksArray[i] = editableField.dataset.content;
+  }
+  localStorage.setItem(
+    "unsavedCalendarTasks",
+    JSON.stringify(unsavedTasksArray)
+  );
+  localStorage.setItem("savedCalendarTasks", JSON.stringify(savedTasksArray));
+  localStorage.setItem(
+    "unsavedCalendarTasks",
+    JSON.stringify(unsavedTasksArray)
+  );
+  localStorage.setItem("savedCalendarTasks", JSON.stringify(savedTasksArray));
+});
+document.querySelector("#revertAll").addEventListener("click", function () {
+  for (let i = 0; i < 8; i++) {
+    const editableField = document.querySelector(
+      "td[data-row-number='" + i + "']"
+    );
+    editableField.innerText = savedTasksArray[i];
+    editableField.dataset.content = savedTasksArray[i];
+    editableField.classList.remove("font-italic");
+  }
+});
+document.querySelector("#saveAll").addEventListener("click", function () {
+  for (let i = 0; i < 8; i++) {
+    const editableField = document.querySelector(
+      "td[data-row-number='" + i + "']"
+    );
+    savedTasksArray[i] = editableField.dataset.content;
+    editableField.innerText = savedTasksArray[i];
+    editableField.classList.remove("font-italic");
   }
 });

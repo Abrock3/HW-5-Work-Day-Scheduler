@@ -29,11 +29,14 @@
       <h1 class="display-3">Work Day Scheduler</h1>
       <p class="lead">A simple calendar app for scheduling your work day</p>
       <p id="currentDay" class="lead"></p>
-    
     </header>
-      <button class="p-2 wrap-text" id="clearAll">Clear All Tasks</button>
-      <button class="mt-2 p-2" id="revertAll">Revert All Unsaved Changes</button>
-      <button class="mt-2 p-2" id="saveAll">Save All Changes</button>
+    <div class="d-flex justify-content-around mb-3">
+      <button class="col-3 p-2 pb-3 pt-3 wrap-text bg-danger" id="clearAll">Clear All Tasks</button>
+      <button class="col-4 p-2 pb-3 pt-3 bg-warning" id="revertAll">
+        Revert All Changes
+      </button>
+      <button class="col-3 p-2 pb-3 pt-3 bg-success" id="saveAll">Save All Changes</button>
+    </div>
     <table class="container"></table>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="./assets/javascript/script.js"></script>
