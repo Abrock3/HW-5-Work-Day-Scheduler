@@ -40,11 +40,11 @@ function createHourLine(i) {
     rowNumber +
     `":>` +
     task +
-    `</td><td class="col-3 col-lg-1 border border-dark p-3"><i type=button class="fas fa-undo toggle" data-row-number="` +
+    `</td><td class="col-3 col-lg-1 border border-dark p-3"><i type=button class="fas fa-undo toggle p-1" data-row-number="` +
     rowNumber +
-    `"></i><i type=button class="fas fa-save ml-1" data-row-number="` +
+    `"></i><i type=button class="fas fa-save p-1" data-row-number="` +
     rowNumber +
-    `"></i><i type=button class="trash fas fa-trash ml-1" data-row-number="` +
+    `"></i><i type=button class="trash fas fa-trash p-1" data-row-number="` +
     rowNumber +
     `"></i></td> `;
   containerEl.appendChild(rowEl);
