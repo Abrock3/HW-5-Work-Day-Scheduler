@@ -118,7 +118,7 @@ containerEl.addEventListener("click", (event) => {
     setLocalStorage();
     editableField.classList.remove("font-italic");
     editableField.innerText += " (Saved!)";
-   timeout= setTimeout(function () {
+    timeout = setTimeout(function () {
       editableField.innerText = editableField.dataset.content;
     }, 600);
     return;
