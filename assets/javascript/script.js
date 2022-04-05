@@ -55,6 +55,14 @@ for (let i = 9; i < 17; i++) {
   createHourLine(i);
 }
 
+function setLocalStorage() {
+  localStorage.setItem(
+    "unsavedCalendarTasks",
+    JSON.stringify(unsavedTasksArray)
+  );
+  localStorage.setItem("savedCalendarTasks", JSON.stringify(savedTasksArray));
+}
+
 // this eventlistener works on focus to set the editable fields to their correct content (when it's not selected, sometimes more text is added)
 containerEl.addEventListener("focusin", (event) => {
   event.stopPropagation();
@@ -81,10 +89,7 @@ containerEl.addEventListener("focusout", (event) => {
     unsavedTasksArray[target.dataset.rowNumber] = target.innerText;
     target.dataset.content = target.innerText;
     target.innerText = target.innerText + " (not saved yet)";
-    localStorage.setItem(
-      "unsavedCalendarTasks",
-      JSON.stringify(unsavedTasksArray)
-    );
+    setLocalStorage();
     target.classList.add("font-italic");
   } else {
     target.classList.remove("font-italic");
@@ -110,11 +115,7 @@ containerEl.addEventListener("click", (event) => {
     unsavedTasksArray[rowNumber] = savedTasksArray[rowNumber];
     savedTasksArray[rowNumber] = temp;
     editableField.innerText = editableField.dataset.content;
-    localStorage.setItem(
-      "unsavedCalendarTasks",
-      JSON.stringify(unsavedTasksArray)
-    );
-    localStorage.setItem("savedCalendarTasks", JSON.stringify(savedTasksArray));
+    setLocalStorage();
     editableField.classList.remove("font-italic");
     editableField.innerText += " (Saved!)";
     setTimeout(function () {
@@ -153,16 +154,7 @@ containerEl.addEventListener("click", (event) => {
     editableField.innerText = "";
     editableField.dataset.content = "";
     savedTasksArray[rowNumber] = "";
-    localStorage.setItem(
-      "unsavedCalendarTasks",
-      JSON.stringify(unsavedTasksArray)
-    );
-    localStorage.setItem("savedCalendarTasks", JSON.stringify(savedTasksArray));
-    localStorage.setItem(
-      "unsavedCalendarTasks",
-      JSON.stringify(unsavedTasksArray)
-    );
-    localStorage.setItem("savedCalendarTasks", JSON.stringify(savedTasksArray));
+    setLocalStorage();
   }
 });
 
@@ -177,16 +169,7 @@ document.querySelector("#clearAll").addEventListener("click", function () {
     editableField.dataset.content = "";
     savedTasksArray[i] = editableField.dataset.content;
   }
-  localStorage.setItem(
-    "unsavedCalendarTasks",
-    JSON.stringify(unsavedTasksArray)
-  );
-  localStorage.setItem("savedCalendarTasks", JSON.stringify(savedTasksArray));
-  localStorage.setItem(
-    "unsavedCalendarTasks",
-    JSON.stringify(unsavedTasksArray)
-  );
-  localStorage.setItem("savedCalendarTasks", JSON.stringify(savedTasksArray));
+  setLocalStorage();
 });
 
 // runs through each row and displays the "Saved" phrase and state for each, but retains the unsaved version in the unsaved array
@@ -219,16 +202,7 @@ document.querySelector("#saveAll").addEventListener("click", function () {
       }, 600);
     }
   }
-  localStorage.setItem(
-    "unsavedCalendarTasks",
-    JSON.stringify(unsavedTasksArray)
-  );
-  localStorage.setItem("savedCalendarTasks", JSON.stringify(savedTasksArray));
-  localStorage.setItem(
-    "unsavedCalendarTasks",
-    JSON.stringify(unsavedTasksArray)
-  );
-  localStorage.setItem("savedCalendarTasks", JSON.stringify(savedTasksArray));
+  setLocalStorage();
 });
 // this code sets nextHour to be the beginning of the next hour; used in the subsequent interval function
 let nextHour = moment();
