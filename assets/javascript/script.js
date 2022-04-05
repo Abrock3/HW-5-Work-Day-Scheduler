@@ -34,7 +34,7 @@ function createHourLine(i) {
   rowEl.innerHTML =
     `<th class="col-2 col-md-2 col-lg-1 border border-dark p-3">` +
     hour +
-    `</th><td contentEditable=true class="col-7 col-md-8 border border-dark p-3 editField text-break" data-content="` +
+    `</th><td contentEditable=true class="col-7 col-md-8 col-lg-9 border border-dark p-3 editField text-break" data-content="` +
     task +
     `" data-row-number="` +
     rowNumber +
@@ -118,7 +118,7 @@ containerEl.addEventListener("click", (event) => {
     setLocalStorage();
     editableField.classList.remove("font-italic");
     editableField.innerText += " (Saved!)";
-    setTimeout(function () {
+   timeout= setTimeout(function () {
       editableField.innerText = editableField.dataset.content;
     }, 600);
     return;
@@ -160,6 +160,7 @@ containerEl.addEventListener("click", (event) => {
 
 // runs through each row and stores the "saved" phrases in unsaved storage, then clears all "saved" values and text
 document.querySelector("#clearAll").addEventListener("click", function () {
+  clearTimeout(timeout);
   for (let i = 0; i < 8; i++) {
     const editableField = document.querySelector(
       "td[data-row-number='" + i + "']"
@@ -197,7 +198,7 @@ document.querySelector("#saveAll").addEventListener("click", function () {
       editableField.innerText = savedTasksArray[i];
       editableField.classList.remove("font-italic");
       editableField.innerText += " (Saved!)";
-      setTimeout(function () {
+      timeout = setTimeout(function () {
         editableField.innerText = editableField.dataset.content;
       }, 600);
     }
