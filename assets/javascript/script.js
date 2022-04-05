@@ -1,5 +1,6 @@
 const currentDayEl = document.querySelector("#currentDay");
 const containerEl = document.querySelector(".container");
+let timeout;
 // used the nullish operater to determine if there's already local storage, and if not to generate an empty array for both variables
 let savedTasksArray = JSON.parse(
   localStorage.getItem("savedCalendarTasks")
@@ -65,7 +66,7 @@ containerEl.addEventListener("focusout", (event) => {
   ) {
     unsavedTasksArray[target.dataset.rowNumber] = target.innerText;
     target.dataset.content = target.innerText;
-    target.innerText = target.innerText + " (unsaved)";
+    target.innerText = target.innerText + " (not saved yet)";
     localStorage.setItem(
       "unsavedCalendarTasks",
       JSON.stringify(unsavedTasksArray)
@@ -99,6 +100,10 @@ containerEl.addEventListener("click", (event) => {
     );
     localStorage.setItem("savedCalendarTasks", JSON.stringify(savedTasksArray));
     editableField.classList.remove("font-italic");
+    editableField.innerText += " (Saved!)";
+    setTimeout(function () {
+      editableField.innerText = editableField.dataset.content;
+    }, 400);
     return;
   }
   //   swaps the "saved" phrase and state on this row to the "unsaved" phrase and state
@@ -110,7 +115,7 @@ containerEl.addEventListener("click", (event) => {
     editableField.dataset.content = unsavedTasksArray[rowNumber];
     editableField.innerText = editableField.dataset.content;
     editableField.classList.add("font-italic");
-    editableField.innerText += " (unsaved)";
+    editableField.innerText += " (not saved yet)";
     return;
   }
   //   swaps to the saved phrase and state
@@ -186,16 +191,20 @@ document.querySelector("#saveAll").addEventListener("click", function () {
       savedTasksArray[i] = temp;
       editableField.innerText = savedTasksArray[i];
       editableField.classList.remove("font-italic");
+      editableField.innerText += " (Saved!)";
+      setTimeout(function () {
+        editableField.innerText = editableField.dataset.content;
+      }, 400);
     }
   }
-   localStorage.setItem(
-     "unsavedCalendarTasks",
-     JSON.stringify(unsavedTasksArray)
-   );
-   localStorage.setItem("savedCalendarTasks", JSON.stringify(savedTasksArray));
-   localStorage.setItem(
-     "unsavedCalendarTasks",
-     JSON.stringify(unsavedTasksArray)
-   );
-   localStorage.setItem("savedCalendarTasks", JSON.stringify(savedTasksArray));
+  localStorage.setItem(
+    "unsavedCalendarTasks",
+    JSON.stringify(unsavedTasksArray)
+  );
+  localStorage.setItem("savedCalendarTasks", JSON.stringify(savedTasksArray));
+  localStorage.setItem(
+    "unsavedCalendarTasks",
+    JSON.stringify(unsavedTasksArray)
+  );
+  localStorage.setItem("savedCalendarTasks", JSON.stringify(savedTasksArray));
 });
