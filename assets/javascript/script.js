@@ -10,7 +10,7 @@ let unsavedTasksArray = JSON.parse(
 // this variable gets used to set the date in the header; in addition it's used later to determine whether each hour has already passed
 const today = moment();
 currentDayEl.innerText = today.format("dddd, MMMM Do");
-
+// This function gets called multiple times to create and append the rows of the table
 function createHourLine(i) {
   const rowEl = document.createElement("tr");
   const hour = i > 12 ? i - 12 + ":00 PM" : i + ":00 AM";
@@ -27,7 +27,7 @@ function createHourLine(i) {
   rowEl.innerHTML =
     `<th class="col-2 col-md-2 col-lg-1 border border-dark p-3">` +
     hour +
-    `</th><td contentEditable=true class="col-7 col-md-8 border border-dark p-3 editField" data-content="` +
+    `</th><td contentEditable=true class="col-7 col-md-8 border border-dark p-3 editField text-break" data-content="` +
     task +
     `" data-row-number="` +
     rowNumber +
@@ -42,9 +42,11 @@ function createHourLine(i) {
     `"></i></td> `;
   containerEl.appendChild(rowEl);
 }
+// this for loop executes createHourLine 8 times, and passes in the value of i as an argument each time
 for (let i = 9; i < 17; i++) {
   createHourLine(i);
 }
+// this eventlistener works on focus to set the editable fields to their correct content (when it's not selected, sometimes more text is added)
 containerEl.addEventListener("focusin", (event) => {
   event.stopPropagation();
   const target = event.target;
@@ -52,6 +54,8 @@ containerEl.addEventListener("focusin", (event) => {
     target.innerText = target.dataset.content;
   }
 });
+// on focusout, the editable field will check whether the text is different from the "saved" text, and if so will be italicized and
+// text will be added to make it clear that it's not saved
 containerEl.addEventListener("focusout", (event) => {
   event.stopPropagation();
   const target = event.target;
@@ -71,6 +75,8 @@ containerEl.addEventListener("focusout", (event) => {
     target.classList.remove("font-italic");
   }
 });
+// this eventlistener uses event delegation to listen for clicks, the if statements determine what the target is, and
+// will save it, toggle it between saved and unsaved, or clear it (saving the saved value in the "unsaved" array)
 containerEl.addEventListener("click", (event) => {
   event.stopPropagation();
   const target = event.target;
@@ -78,6 +84,7 @@ containerEl.addEventListener("click", (event) => {
   const editableField = document.querySelector(
     "td[data-row-number='" + rowNumber + "']"
   );
+  //   if an unsaved phrase is displayed, swaps the unsaved and saved array indices of this row, and takes off the italics and the text saying "(unsaved)"
   if (
     target.classList.contains("fa-save") &&
     editableField.dataset.content != savedTasksArray[rowNumber]
@@ -94,6 +101,7 @@ containerEl.addEventListener("click", (event) => {
     editableField.classList.remove("font-italic");
     return;
   }
+  //   swaps the "saved" phrase and state on this row to the "unsaved" phrase and state
   if (
     target.classList.contains("toggle") &&
     editableField.dataset.content === savedTasksArray[rowNumber] &&
@@ -105,6 +113,7 @@ containerEl.addEventListener("click", (event) => {
     editableField.innerText += " (unsaved)";
     return;
   }
+  //   swaps to the saved phrase and state
   if (
     target.classList.contains("toggle") &&
     editableField.dataset.content === unsavedTasksArray[rowNumber]
@@ -114,6 +123,7 @@ containerEl.addEventListener("click", (event) => {
     editableField.classList.remove("font-italic");
     return;
   }
+  //   puts the "saved" phrase into unsaved storage, then clears the text, content attribute, and savedTasksArray index associated with this row
   if (target.classList.contains("trash")) {
     unsavedTasksArray[rowNumber] = savedTasksArray[rowNumber];
     editableField.innerText = "";
@@ -131,6 +141,7 @@ containerEl.addEventListener("click", (event) => {
     localStorage.setItem("savedCalendarTasks", JSON.stringify(savedTasksArray));
   }
 });
+// runs through each row and stores the "saved" phrases in unsaved storage, then clears all "saved" values and text
 document.querySelector("#clearAll").addEventListener("click", function () {
   for (let i = 0; i < 8; i++) {
     const editableField = document.querySelector(
@@ -152,6 +163,7 @@ document.querySelector("#clearAll").addEventListener("click", function () {
   );
   localStorage.setItem("savedCalendarTasks", JSON.stringify(savedTasksArray));
 });
+// runs through each row and displays the "Saved" phrase and state for each, but retains the unsaved version in the unsaved array
 document.querySelector("#revertAll").addEventListener("click", function () {
   for (let i = 0; i < 8; i++) {
     const editableField = document.querySelector(
@@ -162,13 +174,28 @@ document.querySelector("#revertAll").addEventListener("click", function () {
     editableField.classList.remove("font-italic");
   }
 });
+// runs through each row and saves all visible unsaved content to the "saved" array
 document.querySelector("#saveAll").addEventListener("click", function () {
   for (let i = 0; i < 8; i++) {
     const editableField = document.querySelector(
       "td[data-row-number='" + i + "']"
     );
-    savedTasksArray[i] = editableField.dataset.content;
-    editableField.innerText = savedTasksArray[i];
-    editableField.classList.remove("font-italic");
+    if (editableField.dataset.content != savedTasksArray[i]) {
+      const temp = unsavedTasksArray[i];
+      unsavedTasksArray[i] = savedTasksArray[i];
+      savedTasksArray[i] = temp;
+      editableField.innerText = savedTasksArray[i];
+      editableField.classList.remove("font-italic");
+    }
   }
+   localStorage.setItem(
+     "unsavedCalendarTasks",
+     JSON.stringify(unsavedTasksArray)
+   );
+   localStorage.setItem("savedCalendarTasks", JSON.stringify(savedTasksArray));
+   localStorage.setItem(
+     "unsavedCalendarTasks",
+     JSON.stringify(unsavedTasksArray)
+   );
+   localStorage.setItem("savedCalendarTasks", JSON.stringify(savedTasksArray));
 });
