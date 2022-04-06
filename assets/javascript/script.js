@@ -81,6 +81,9 @@ function createHourLine(i) {
     }
   
   let taskText
+  // this if statement will determine if the user has any local storage, and if not will display tutorial text in each field. 
+  // after the task arrays get stored locally, this will never appear again
+  // there is a focusin listener that wipes the tutorial text when that element is focused
   if (JSON.parse(
   localStorage.getItem("unsavedCalendarTasks")===null)){
     taskText = firstVisitText
