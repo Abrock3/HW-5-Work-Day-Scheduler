@@ -1,14 +1,66 @@
 const currentDayEl = document.querySelector("#currentDay");
 const containerEl = document.querySelector(".container");
 let timeout;
-
+// Allows the developer to change the displayed hours if desired. Later I may add functionality to let the user modify these and save them in local storage
+const firstHour = 9;
+const lasthour = 16;
 // used the nullish operater to determine if there's already local storage, and if not to generate an empty array for both variables
 let savedTasksArray = JSON.parse(
   localStorage.getItem("savedCalendarTasks")
-) ?? ["", "", "", "", "", "", "", ""];
+) ?? [
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+];
 let unsavedTasksArray = JSON.parse(
   localStorage.getItem("unsavedCalendarTasks")
-) ?? ["", "", "", "", "", "", "", ""];
+) ?? [
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+  "",
+];
 
 // this variable gets used to set the date in the header; in addition it's used later to determine whether each hour has already passed
 const today = moment();
@@ -20,9 +72,12 @@ function createHourLine(i) {
   let hour = i > 11 ? i - 12 + ":00 PM" : i + ":00 AM";
   if (i === 12) {
     hour = "12:00 PM";
-  }
-  const task = savedTasksArray[i - 9] ?? "";
-  const rowNumber = i - 9;
+  } else if
+    (i===0){
+      hour = "12:00 AM"
+    }
+  
+  const task = savedTasksArray[i] ?? "";
   if (today.format("HH") > i) {
     rowEl.classList.add("bg-secondary");
   } else if (today.format("HH") == i) {
@@ -30,28 +85,28 @@ function createHourLine(i) {
   } else if (today.format("HH") < i) {
     rowEl.classList.add("bg-success");
   }
-  rowEl.dataset.rowNumber = rowNumber;
+  rowEl.dataset.rowNumber = i;
   rowEl.innerHTML =
     `<th class="col-2 col-md-2 col-lg-1 border border-dark p-3">` +
     hour +
     `</th><td contentEditable=true class="col-7 col-md-8 col-lg-9 border border-dark p-3 editField text-break" data-content="` +
     task +
     `" data-row-number="` +
-    rowNumber +
+    i +
     `":>` +
     task +
     `</td><td class="col-3 col-lg-1 border border-dark p-3"><i type=button class="fas fa-undo toggle p-1" data-row-number="` +
-    rowNumber +
-    `"></i><i type=button class="fas fa-save p-1" data-row-number="` +
-    rowNumber +
+    i +
+    `"></i><i type=button class="fas fa-save save p-1" data-row-number="` +
+    i +
     `"></i><i type=button class="trash fas fa-trash p-1" data-row-number="` +
-    rowNumber +
+    i +
     `"></i></td> `;
   containerEl.appendChild(rowEl);
 }
 
-// this for loop executes createHourLine 8 times, and passes in the value of i as an argument each time
-for (let i = 9; i < 17; i++) {
+// this for loop executes createHourLine the desired number of times, and passes in the value of i as an argument each time
+for (let i = firstHour; i <= lasthour; i++) {
   createHourLine(i);
 }
 
@@ -108,7 +163,7 @@ containerEl.addEventListener("click", (event) => {
 
   //   if an unsaved phrase is displayed, swaps the unsaved and saved array indices of this row, and takes off the italics and the text saying "(unsaved)"
   if (
-    target.classList.contains("fa-save") &&
+    target.classList.contains("save") &&
     editableField.dataset.content != savedTasksArray[rowNumber]
   ) {
     const temp = unsavedTasksArray[rowNumber];
@@ -161,7 +216,7 @@ containerEl.addEventListener("click", (event) => {
 // runs through each row and stores the "saved" phrases in unsaved storage, then clears all "saved" values and text
 document.querySelector("#clearAll").addEventListener("click", function () {
   clearTimeout(timeout);
-  for (let i = 0; i < 8; i++) {
+  for (let i = firstHour; i <= lasthour; i++) {
     const editableField = document.querySelector(
       "td[data-row-number='" + i + "']"
     );
@@ -175,7 +230,7 @@ document.querySelector("#clearAll").addEventListener("click", function () {
 
 // runs through each row and displays the "Saved" phrase and state for each, but retains the unsaved version in the unsaved array
 document.querySelector("#revertAll").addEventListener("click", function () {
-  for (let i = 0; i < 8; i++) {
+  for (let i = firstHour; i <= lasthour; i++) {
     const editableField = document.querySelector(
       "td[data-row-number='" + i + "']"
     );
@@ -187,7 +242,7 @@ document.querySelector("#revertAll").addEventListener("click", function () {
 
 // runs through each row and saves all visible unsaved content to the "saved" array
 document.querySelector("#saveAll").addEventListener("click", function () {
-  for (let i = 0; i < 8; i++) {
+  for (let i = firstHour; i <= lasthour; i++) {
     const editableField = document.querySelector(
       "td[data-row-number='" + i + "']"
     );
@@ -234,7 +289,7 @@ setInterval(function () {
   });
   // at midnight, this for loop will set the bootstrap classes to their proper values
   if (nextHour === 1) {
-    for (let i = 0; i < 8; i++) {
+    for (let i = firstHour; i < lasthour; i++) {
       const rowEl = document.querySelector("tr[data-row-number='" + i + "']");
       rowEl.classList.remove("bg-warning");
       rowEl.classList.remove("bg-secondary");
