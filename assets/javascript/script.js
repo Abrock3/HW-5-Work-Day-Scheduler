@@ -65,7 +65,6 @@ let unsavedTasksArray = JSON.parse(
   "",
   "",
 ];
-savedTasksArray = ["firstItem", "","","","","","","lastitem"]
 // this code deals with a bug from interactions with local storage from previous versions of the site
 // previously the 9:00 hour was stored at the 0 index, and the array was only 8 indices long
 // this will convert their old arrays into a format that interacts well with the new version
