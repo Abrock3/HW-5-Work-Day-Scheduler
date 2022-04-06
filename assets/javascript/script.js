@@ -324,17 +324,13 @@ function hourPassing() {
 }
 // This interval determines the amount of time until the next hour, and when the hour passes it calls the hourPassing function
 function createInterval() {
-  timeInterval = setInterval(
-    function () {
-      hourPassing();
-    },
-    nextHour.diff(moment()) + 1 - 3420000
-  );
+  hourPassing();
+  timeInterval = setInterval(hourPassing(), nextHour.diff(moment()) + 1);
 }
 // this clears timeInterval and calls the hourPassing and createInterval function every time the window regains focus
 // this makes sure that the user can't interrupt the interval by tabbing away
 window.addEventListener("focus", function () {
   clearInterval(timeInterval);
-  hourPassing();
   createInterval();
 });
+createInterval();
