@@ -1,6 +1,7 @@
 const currentDayEl = document.querySelector("#currentDay");
 const containerEl = document.querySelector(".container-fluid");
 let timeout;
+const firstVisitText = "Type your text here, and save once you're done editing!"
 // Allows the developer to change the displayed hours if desired. 
 // Later I may add functionality to let the user modify these and save them in local storage
 // Because the savedTasksArray's indices are linked to the hour, and not the number of rows, this should be easy to implement if desired
@@ -79,7 +80,13 @@ function createHourLine(i) {
       hour = "12:00 AM"
     }
   
-  const task = savedTasksArray[i] ?? "";
+  let taskText
+  if (JSON.parse(
+  localStorage.getItem("unsavedCalendarTasks")===null)){
+    taskText = firstVisitText
+  } else {
+    taskText = savedTasksArray[i];
+  }
   if (today.format("HH") > i) {
     rowEl.classList.add("bg-secondary");
   } else if (today.format("HH") == i) {
@@ -93,11 +100,11 @@ function createHourLine(i) {
     `<th class="col-2 col-xl-1 border border-dark p-3">` +
     hour +
     `</th><td contentEditable=true class="col-8 col-lg-9 col-xl-10 border border-dark p-3 editField text-break" data-content="` +
-    task +
+    savedTasksArray[i] +
     `" data-row-number="` +
     i +
     `":>` +
-    task +
+    taskText +
     `</td><td class="col-2 col-lg-1 border border-dark p-1 text-center"><i type=button class="fas fa-undo toggle p-2 rounded" data-row-number="` +
     i +
     `"></i><i type=button class="fas fa-save save p-2 rounded" data-row-number="` +
