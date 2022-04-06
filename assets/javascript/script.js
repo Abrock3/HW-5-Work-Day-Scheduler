@@ -1,5 +1,5 @@
 const currentDayEl = document.querySelector("#currentDay");
-const containerEl = document.querySelector(".container");
+const containerEl = document.querySelector(".container-fluid");
 let timeout;
 // Allows the developer to change the displayed hours if desired. Later I may add functionality to let the user modify these and save them in local storage
 const firstHour = 9;
@@ -85,21 +85,22 @@ function createHourLine(i) {
   } else if (today.format("HH") < i) {
     rowEl.classList.add("bg-success");
   }
+  rowEl.classList.add("row-fluid")
   rowEl.dataset.rowNumber = i;
   rowEl.innerHTML =
-    `<th class="col-2 col-md-2 col-lg-1 border border-dark p-3">` +
+    `<th class="col-2 col-xl-1 border border-dark p-3">` +
     hour +
-    `</th><td contentEditable=true class="col-7 col-md-8 col-lg-9 border border-dark p-3 editField text-break" data-content="` +
+    `</th><td contentEditable=true class="col-8 col-lg-9 col-xl-10 border border-dark p-3 editField text-break" data-content="` +
     task +
     `" data-row-number="` +
     i +
     `":>` +
     task +
-    `</td><td class="col-3 col-lg-1 border border-dark p-3"><i type=button class="fas fa-undo toggle p-1" data-row-number="` +
+    `</td><td class="col-2 col-lg-1 border border-dark p-1 text-center"><i type=button class="fas fa-undo toggle p-2 rounded" data-row-number="` +
     i +
-    `"></i><i type=button class="fas fa-save save p-1" data-row-number="` +
+    `"></i><i type=button class="fas fa-save save p-2 rounded" data-row-number="` +
     i +
-    `"></i><i type=button class="trash fas fa-trash p-1" data-row-number="` +
+    `"></i><br><i type=button class="trash fas fa-trash p-2 rounded" data-row-number="` +
     i +
     `"></i></td> `;
   containerEl.appendChild(rowEl);
