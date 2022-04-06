@@ -18,6 +18,6 @@ i:hover {
 }
 
 /* this is an attempt to solve a bootstrap column spacing issue on iphone/safari */
-.row:before .row:after {
-  display: inline-block;
+.row::before .row::after {
+  display:block;
 }

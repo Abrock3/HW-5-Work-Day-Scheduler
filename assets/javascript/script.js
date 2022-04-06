@@ -7,8 +7,8 @@ const firstVisitText =
 // Allows the developer to change the displayed hours if desired.
 // Later I may add functionality to let the user modify these and save them in local storage
 // Because the savedTasksArray's indices are linked to the hour, and not the number of rows, this should be easy to implement if desired
-const firstHour = 0;
-const lasthour = 23;
+const firstHour = 9;
+const lasthour = 16;
 // used the nullish operater to determine if there's already local storage, and if not to generate an empty array for both variables
 let savedTasksArray = JSON.parse(
   localStorage.getItem("savedCalendarTasks")
@@ -294,6 +294,7 @@ nextHour.set({
   millisecond: 0,
 });
 
+// this code determines the current hour, retrieves the elements associated with that hour and the last hour, and changes their bootstrap classes
 function hourPassing() {
   const thisHourEl = document.querySelector(
     "tr[data-row-number='" + (moment().hour()) + "']"
@@ -324,13 +325,13 @@ function hourPassing() {
 }
 // This interval determines the amount of time until the next hour, and when the hour passes it calls the hourPassing function
 function createInterval() {
-  hourPassing();
   timeInterval = setInterval(hourPassing(), nextHour.diff(moment()) + 1);
 }
 // this clears timeInterval and calls the hourPassing and createInterval function every time the window regains focus
-// this makes sure that the user can't interrupt the interval by tabbing away
+// this makes sure that the user can't interrupt the interval by tabbing away, especially on mobile
 window.addEventListener("focus", function () {
   clearInterval(timeInterval);
+  hourPassing();
   createInterval();
 });
 createInterval();
