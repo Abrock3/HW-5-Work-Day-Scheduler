@@ -19,5 +19,9 @@ i:hover {
 
 /* this is an attempt to solve a bootstrap column spacing issue on iphone/safari */
 .row-fluid::before .row-fluid::after {
-  display: inline-block;
+  display: block;
+
+}
+.row-fluid {
+    border: solid 1px transparent;
 }
