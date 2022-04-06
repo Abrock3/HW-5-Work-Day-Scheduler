@@ -1,13 +1,14 @@
 const currentDayEl = document.querySelector("#currentDay");
 const containerEl = document.querySelector(".container-fluid");
 let timeout;
+let timeInterval;
 const firstVisitText =
   "Type your text here, and save once you're done editing!";
 // Allows the developer to change the displayed hours if desired.
 // Later I may add functionality to let the user modify these and save them in local storage
 // Because the savedTasksArray's indices are linked to the hour, and not the number of rows, this should be easy to implement if desired
-const firstHour = 9;
-const lasthour = 16;
+const firstHour = 0;
+const lasthour = 23;
 // used the nullish operater to determine if there's already local storage, and if not to generate an empty array for both variables
 let savedTasksArray = JSON.parse(
   localStorage.getItem("savedCalendarTasks")
@@ -73,7 +74,7 @@ if (savedTasksArray.length < 24) {
     savedTasksArray.unshift("");
     unsavedTasksArray.unshift("");
   }
-  for (let i = 0; i <= 24-savedTasksArray.length; i++) {
+  for (let i = 0; i <= 24 - savedTasksArray.length; i++) {
     savedTasksArray.push("");
     unsavedTasksArray.push("");
   }
@@ -292,18 +293,18 @@ nextHour.set({
   second: 0,
   millisecond: 0,
 });
-// This interval determines the amount of time until the next hour, and when the hour passes it changes the formatting of the <tr> elements using bootstrap classes
-setInterval(function () {
+
+function hourPassing() {
   const thisHourEl = document.querySelector(
-    "tr[data-row-number='" + (moment().hour() - 9) + "']"
+    "tr[data-row-number='" + (moment().hour()) + "']"
   );
-  const nextHourEl = document.querySelector(
-    "tr[data-row-number='" + (moment().hour() - 10) + "']"
+  const lastHourEl = document.querySelector(
+    "tr[data-row-number='" + (moment().hour()-1) + "']"
   );
   thisHourEl.classList.remove("bg-success");
   thisHourEl.classList.add("bg-warning");
-  nextHourEl.classList.remove("bg-warning");
-  nextHourEl.classList.add("bg-secondary");
+  lastHourEl.classList.remove("bg-warning");
+  lastHourEl.classList.add("bg-secondary");
   nextHour = moment();
   nextHour.set({
     hour: nextHour.hour() + 1,
@@ -320,4 +321,20 @@ setInterval(function () {
       rowEl.classList.add("bg-success");
     }
   }
-}, nextHour.diff(moment()) + 1);
+}
+// This interval determines the amount of time until the next hour, and when the hour passes it calls the hourPassing function
+function createInterval() {
+  timeInterval = setInterval(
+    function () {
+      hourPassing();
+    },
+    nextHour.diff(moment()) + 1 - 3420000
+  );
+}
+// this clears timeInterval and calls the hourPassing and createInterval function every time the window regains focus
+// this makes sure that the user can't interrupt the interval by tabbing away
+window.addEventListener("focus", function () {
+  clearInterval(timeInterval);
+  hourPassing();
+  createInterval();
+});
