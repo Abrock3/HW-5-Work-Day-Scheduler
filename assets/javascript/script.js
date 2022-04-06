@@ -1,8 +1,9 @@
 const currentDayEl = document.querySelector("#currentDay");
 const containerEl = document.querySelector(".container-fluid");
 let timeout;
-const firstVisitText = "Type your text here, and save once you're done editing!"
-// Allows the developer to change the displayed hours if desired. 
+const firstVisitText =
+  "Type your text here, and save once you're done editing!";
+// Allows the developer to change the displayed hours if desired.
 // Later I may add functionality to let the user modify these and save them in local storage
 // Because the savedTasksArray's indices are linked to the hour, and not the number of rows, this should be easy to implement if desired
 const firstHour = 9;
@@ -64,7 +65,20 @@ let unsavedTasksArray = JSON.parse(
   "",
   "",
 ];
-
+savedTasksArray = ["firstItem", "","","","","","","lastitem"]
+// this code deals with a bug from interactions with local storage from previous versions of the site
+// previously the 9:00 hour was stored at the 0 index, and the array was only 8 indices long
+// this will convert their old arrays into a format that interacts well with the new version
+if (savedTasksArray.length < 24) {
+  for (let i = 0; i < 9; i++) {
+    savedTasksArray.unshift("");
+    unsavedTasksArray.unshift("");
+  }
+  for (let i = 0; i <= 24-savedTasksArray.length; i++) {
+    savedTasksArray.push("");
+    unsavedTasksArray.push("");
+  }
+}
 // this variable gets used to set the date in the header; in addition it's used later to determine whether each hour has already passed
 const today = moment();
 currentDayEl.innerText = today.format("dddd, MMMM Do");
@@ -75,18 +89,16 @@ function createHourLine(i) {
   let hour = i > 11 ? i - 12 + ":00 PM" : i + ":00 AM";
   if (i === 12) {
     hour = "12:00 PM";
-  } else if
-    (i===0){
-      hour = "12:00 AM"
-    }
-  
-  let taskText
-  // this if statement will determine if the user has any local storage, and if not will display tutorial text in each field. 
+  } else if (i === 0) {
+    hour = "12:00 AM";
+  }
+
+  let taskText;
+  // this if statement will determine if the user has any local storage, and if not will display tutorial text in each field.
   // after the task arrays get stored locally, this will never appear again
   // there is a focusin listener that wipes the tutorial text when that element is focused
-  if (JSON.parse(
-  localStorage.getItem("unsavedCalendarTasks")===null)){
-    taskText = firstVisitText
+  if (JSON.parse(localStorage.getItem("unsavedCalendarTasks") === null)) {
+    taskText = firstVisitText;
   } else {
     taskText = savedTasksArray[i];
   }
@@ -97,7 +109,7 @@ function createHourLine(i) {
   } else if (today.format("HH") < i) {
     rowEl.classList.add("bg-success");
   }
-  rowEl.classList.add("row-fluid")
+  rowEl.classList.add("row-fluid");
   rowEl.dataset.rowNumber = i;
   rowEl.innerHTML =
     `<th class="col-2 col-xl-1 border border-dark p-3">` +
