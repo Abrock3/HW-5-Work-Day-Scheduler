@@ -17,8 +17,7 @@ i:hover {
    transition: all 0.3s ease-in-out;
 }
 
-/* this is an attempt to solve a bootstrap column spacing issue on iphone/safari */
-.row-fluid::before .row-fluid::after {
-  display: none !important;
 
+.row-fluid {
+  display: -webkit-flex;
 }
