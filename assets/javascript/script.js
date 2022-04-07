@@ -112,7 +112,7 @@ function createHourLine(i) {
   rowEl.classList.add("row-fluid");
   rowEl.dataset.rowNumber = i;
   rowEl.innerHTML =
-    `<th class="col-2 col-xl-1 border border-dark p-3">` +
+    `<th class="col-2 col-xl-1 border border-dark p-2 pt-4 align-items-center">` +
     hour +
     `</th><td contentEditable=true class="col-8 col-lg-9 col-xl-10 border border-dark p-3 editField text-break" data-content="` +
     savedTasksArray[i] +

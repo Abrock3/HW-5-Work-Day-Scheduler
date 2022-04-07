@@ -17,7 +17,7 @@ i:hover {
    transition: all 0.3s ease-in-out;
 }
 
-
+/* This enables the use of flexbox on more versions of safari, which is required for proper column spacing */
 .row-fluid {
   display: -webkit-flex;
 }
