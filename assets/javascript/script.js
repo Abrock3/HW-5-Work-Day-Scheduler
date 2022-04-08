@@ -320,6 +320,7 @@ function hourPassing() {
       rowEl.classList.remove("bg-warning");
       rowEl.classList.remove("bg-secondary");
       rowEl.classList.add("bg-success");
+      currentDayEl.innerText = moment().format("dddd, MMMM Do");
     }
   }
 }
