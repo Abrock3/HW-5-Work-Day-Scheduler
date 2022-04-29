@@ -35,5 +35,12 @@ Below is a screenshot of the page:
 ![Screenshot](./assets/images/screenshot2.jpg?raw=true "Screenshot")
 
 ## Credits
+
 I used moment to help fetch and parse times.
 I used the moment.js documentation and two W3 schools articles to help me implement moment properly.
+
+## Contact Info
+
+Telephone: 727-400-9280
+Email: a.paulbrock@gmail.com
+linkedin: https://www.linkedin.com/in/adam-p-brock/
