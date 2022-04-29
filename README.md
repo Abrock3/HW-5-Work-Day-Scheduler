@@ -33,8 +33,5 @@ Below is a screenshot of the page:
 ![Screenshot](./assets/images/screenshot.jpg?raw=true "Screenshot")
 
 ## Credits
-
+I used moment to help fetch and parse times.
 I used the moment.js documentation and two W3 schools articles to help me implement moment properly.
-
-## License
-I cannot license this application because while the javascript was written exclusively by me, much of the HTML and CSS was provided by Trey Eckels and the staff at the Georgia Tech coding boot camp.
