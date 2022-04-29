@@ -7,8 +7,8 @@ const firstVisitText =
 // Allows the developer to change the displayed hours if desired.
 // Later I may add functionality to let the user modify these and save them in local storage
 // Because the savedTasksArray's indices are linked to the hour, and not the number of rows, this should be easy to implement if desired
-const firstHour = 9;
-const lasthour = 16;
+const firstHour = 0;
+const lasthour = 23;
 // used the nullish operater to determine if there's already local storage, and if not to generate an empty array for both variables
 let savedTasksArray = JSON.parse(
   localStorage.getItem("savedCalendarTasks")
