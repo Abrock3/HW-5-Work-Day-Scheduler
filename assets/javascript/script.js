@@ -111,22 +111,13 @@ function createHourLine(i) {
   }
   rowEl.classList.add("row-fluid");
   rowEl.dataset.rowNumber = i;
-  rowEl.innerHTML =
-    `<th class="col-2 col-xl-1 border border-dark p-2 pt-4 align-items-center">` +
-    hour +
-    `</th><td contentEditable=true class="col-8 col-lg-9 col-xl-10 border border-dark p-3 editField text-break" data-content="` +
-    savedTasksArray[i] +
-    `" data-row-number="` +
-    i +
-    `":>` +
-    taskText +
-    `</td><td class="col-2 col-lg-1 border border-dark p-1 text-center"><i type=button class="fas fa-undo toggle p-2 rounded" data-row-number="` +
-    i +
-    `"></i><i type=button class="fas fa-save save p-2 rounded" data-row-number="` +
-    i +
-    `"></i><br><i type=button class="trash fas fa-trash p-2 rounded" data-row-number="` +
-    i +
-    `"></i></td> `;
+  rowEl.innerHTML = `<th class="col-2 col-xl-1 border border-dark p-2 pt-4 align-items-center">${hour}</th>
+  <td contentEditable=true class="col-8 col-lg-9 col-xl-10 border border-dark p-3 editField text-break" data-content="${savedTasksArray[i]}" data-row-number="${i}":>${taskText}</td>
+  <td class="col-2 col-lg-1 border border-dark p-1 text-center">
+    <i type=button class="fas fa-undo toggle p-2 rounded" data-row-number="${i}"></i>
+    <i type=button class="fas fa-save save p-2 rounded" data-row-number="${i}"></i>
+    <br>
+    <i type=button class="trash fas fa-trash p-2 rounded" data-row-number="${i}"></i></td> `;
   containerEl.appendChild(rowEl);
 }
 
@@ -157,7 +148,6 @@ containerEl.addEventListener("focusin", (event) => {
 containerEl.addEventListener("focusout", (event) => {
   event.stopPropagation();
   const target = event.target;
-
   if (target.classList.contains("editField")) {
     target.innerText = target.innerText.trim();
   }
@@ -204,7 +194,7 @@ containerEl.addEventListener("click", (event) => {
     return;
   }
 
-  //   swaps the "saved" phrase and state on this row to the "unsaved" phrase and state
+  //   If the associated editable field is in the "saved" state, this button will swap it to to the "unsaved" phrase and state
   if (
     target.classList.contains("toggle") &&
     editableField.dataset.content === savedTasksArray[rowNumber] &&
@@ -217,7 +207,7 @@ containerEl.addEventListener("click", (event) => {
     return;
   }
 
-  //   swaps to the saved phrase and state
+  //   if the associated editable field is in the unsaved state, swaps the associated editable field to the "saved" phrase and state
   if (
     target.classList.contains("toggle") &&
     editableField.dataset.content === unsavedTasksArray[rowNumber]
@@ -297,10 +287,10 @@ nextHour.set({
 // this code determines the current hour, retrieves the elements associated with that hour and the last hour, and changes their bootstrap classes
 function hourPassing() {
   const thisHourEl = document.querySelector(
-    "tr[data-row-number='" + (moment().hour()) + "']"
+    "tr[data-row-number='" + moment().hour() + "']"
   );
   const lastHourEl = document.querySelector(
-    "tr[data-row-number='" + (moment().hour()-1) + "']"
+    "tr[data-row-number='" + (moment().hour() - 1) + "']"
   );
   thisHourEl.classList.remove("bg-success");
   thisHourEl.classList.add("bg-warning");

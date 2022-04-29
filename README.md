@@ -38,6 +38,9 @@ Below is a screenshot of the page:
 
 I used moment to help fetch and parse times.
 I used the moment.js documentation and two W3 schools articles to help me implement moment properly.
+Bootstrap was used to style this page.
+Fontawesome was used for a the icons on this page.
+A google font was used on this page.
 
 ## Contact Info
 
