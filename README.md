@@ -1,4 +1,4 @@
-# HW-5-Work-Day-Scheduler
+# HW-5-Workday-Planner
 
 ## Description
 
